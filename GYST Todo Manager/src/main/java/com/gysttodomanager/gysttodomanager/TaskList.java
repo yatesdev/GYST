@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.ListIterator;
 
 /**
  * Created by Yates on 4/10/14.
@@ -121,6 +122,20 @@ public class TaskList {
      * Delete task from taskList
      */
     public void delete(Task t) {
-
+        for(int i=0; i< todayList.size(); i++) {
+            if(todayList.get(i).getUniqueID().equals(t.getUniqueID())){
+                todayList.remove(i);
+            }
+        }
+        for(int i=0; i< tomorrowList.size(); i++) {
+            if(tomorrowList.get(i).getUniqueID().equals(t.getUniqueID())){
+                tomorrowList.remove(i);
+            }
+        }
+        for(int i=0; i< upcomingList.size(); i++) {
+            if(upcomingList.get(i).getUniqueID().equals(t.getUniqueID())){
+                upcomingList.remove(i);
+            }
+        }
     }
 }

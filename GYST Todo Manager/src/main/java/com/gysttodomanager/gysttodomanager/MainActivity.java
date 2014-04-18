@@ -76,21 +76,32 @@ public class MainActivity extends Activity
         actionBar.setTitle(mTitle);
     }
 
-    public boolean onPrepareOptionsMenu(Menu menu){
-        if(mtaskDetailFragment != null) {
-            if (this.mtaskDetailFragment.isVisible()) {
-                menu.findItem(R.id.add_button).setVisible(false);
-                menu.findItem(R.id.edit_button).setVisible(true);
-                menu.findItem(R.id.delete_button).setVisible(true);
-            }
-        }
-        if(mtaskListFragment != null) {
-            if(this.mtaskListFragment.isVisible()) {
-                menu.findItem(R.id.add_button).setVisible(true);
-                menu.findItem(R.id.edit_button).setVisible(false);
-                menu.findItem(R.id.delete_button).setVisible(false);
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        if (menu != null && menu.findItem(R.id.add_button) != null && menu.findItem(R.id.edit_button) != null && menu.findItem(R.id.delete_button) != null) {
+            menu.findItem(R.id.add_button).setVisible(true);
+            menu.findItem(R.id.edit_button).setVisible(true);
+            menu.findItem(R.id.delete_button).setVisible(true);
+            if (mtaskDetailFragment != null) {
+                if (this.mtaskDetailFragment.isVisible() && !mtaskDetailFragment.getEditable()) {
+                    menu.findItem(R.id.add_button).setVisible(false);
+                    menu.findItem(R.id.edit_button).setVisible(true);
+                    menu.findItem(R.id.delete_button).setVisible(true);
+                } else if (this.mtaskDetailFragment.isVisible() && mtaskDetailFragment.getEditable()) {
+                    menu.findItem(R.id.add_button).setVisible(false);
+                    menu.findItem(R.id.edit_button).setVisible(false);
+                    menu.findItem(R.id.delete_button).setVisible(false);
+                }
 
             }
+            if (mtaskListFragment != null) {
+                if (this.mtaskListFragment.isVisible()) {
+                    menu.findItem(R.id.add_button).setVisible(true);
+                    menu.findItem(R.id.edit_button).setVisible(false);
+                    menu.findItem(R.id.delete_button).setVisible(false);
+
+                }
+            }
+
         }
         return true;
     }
@@ -120,6 +131,32 @@ public class MainActivity extends Activity
             invalidateOptionsMenu();
             onTaskSelected(null, true); //Go to add task_detail fragment, with editing on
         }
+        if(id == R.id.edit_button) { //Probably not the best to call everything directly but I was having issues otherwise
+            System.out.println("Edit Button Pressed");
+            mtaskDetailFragment.setEditable(!mtaskDetailFragment.getEditable());
+            mtaskDetailFragment.titleBox.setClickable(true);
+            mtaskDetailFragment.titleBox.setFocusableInTouchMode(true);
+            mtaskDetailFragment.titleBox.setEnabled(true);
+            mtaskDetailFragment.descriptionBox.setClickable(true);
+            mtaskDetailFragment.descriptionBox.setFocusableInTouchMode(true);
+            mtaskDetailFragment.descriptionBox.setEnabled(true);
+            mtaskDetailFragment.datePick.setClickable(true);
+            mtaskDetailFragment.datePick.setFocusableInTouchMode(true);
+            mtaskDetailFragment.datePick.setEnabled(true);
+            mtaskDetailFragment.priorityBox.setClickable(true);
+            mtaskDetailFragment.priorityBox.setFocusableInTouchMode(true);
+            mtaskDetailFragment.priorityBox.setEnabled(true);
+            invalidateOptionsMenu();
+        }
+        if(id == R.id.delete_button) {
+            System.out.println("Delete Button Pressed");
+            taskList.delete(mtaskDetailFragment.getTask());
+            FragmentManager fragmentManager = getFragmentManager();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.container, mtaskListFragment)
+                    .commit();
+        }
+
         return super.onOptionsItemSelected(item);
     }
 

@@ -22,9 +22,10 @@ import java.util.GregorianCalendar;
  * Created by Yates on 4/1/14.
  */
 public class TaskDetailFragment extends Fragment {
-    Task task;
-    Boolean editable;
-    Calendar tempDate = new GregorianCalendar();
+    private Task task;
+    private Boolean editable;
+    private Calendar tempDate = new GregorianCalendar();
+    private Menu mOptionsMenu;
 
     EditText titleBox;
     EditText descriptionBox;
@@ -48,44 +49,58 @@ public class TaskDetailFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
         //inflater.inflate(R.menu.detail_fragment_menu, menu);
+        mOptionsMenu = menu;
         super.onCreateOptionsMenu(menu,inflater);
     }
 
-   /* public void onPrepareOptionsMenu(Menu menu){
-        if(editable){
-            menu.findItem(R.id.edit_button).setVisible(false);
-            menu.findItem(R.id.delete_button).setVisible(false);
-        }
-        else {
-            menu.findItem(R.id.edit_button).setVisible(true);
-            menu.findItem(R.id.delete_button).setVisible(true);
-        }
-        getActivity().invalidateOptionsMenu();
-    }*/
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        if(id == R.id.edit_button) {
-            //getActivity().invalidateOptionsMenu();
-            titleBox.setClickable(true);
-            titleBox.setFocusableInTouchMode(true);
-            titleBox.setEnabled(true);
-            descriptionBox.setClickable(true);
-            descriptionBox.setFocusableInTouchMode(true);
-            descriptionBox.setEnabled(true);
-            datePick.setClickable(true);
-            datePick.setFocusableInTouchMode(true);
-            datePick.setEnabled(true);
-            priorityBox.setClickable(true);
-            priorityBox.setFocusableInTouchMode(true);
-            priorityBox.setEnabled(true);
-            item.setEnabled(false);
-            getActivity().invalidateOptionsMenu();
-        }
-        return super.onOptionsItemSelected(item);
+    public Boolean getEditable() {
+        return editable;
     }
+    public void setEditable(Boolean b) {
+        editable = b;
+    }
+    public Task getTask(){
+        return task;
+    }
+
+//    public void onPrepareOptionsMenu(Menu menu){
+//        if(editable){
+//            menu.findItem(R.id.edit_button).setVisible(false);
+//            menu.findItem(R.id.delete_button).setVisible(false);
+//        }
+//        else {
+//            menu.findItem(R.id.edit_button).setVisible(true);
+//            menu.findItem(R.id.delete_button).setVisible(true);
+//        }
+//        getActivity().invalidateOptionsMenu();
+//    }
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        int id = item.getItemId();
+//        if (id == R.id.action_settings) {
+//            return true;
+//        }
+//        if(id == R.id.edit_button) {
+//            editable = !editable;
+//            titleBox.setClickable(true);
+//            titleBox.setFocusableInTouchMode(true);
+//            titleBox.setEnabled(true);
+//            descriptionBox.setClickable(true);
+//            descriptionBox.setFocusableInTouchMode(true);
+//            descriptionBox.setEnabled(true);
+//            datePick.setClickable(true);
+//            datePick.setFocusableInTouchMode(true);
+//            datePick.setEnabled(true);
+//            priorityBox.setClickable(true);
+//            priorityBox.setFocusableInTouchMode(true);
+//            priorityBox.setEnabled(true);
+//            System.out.println("Hey I should be in edit mode now");
+//        }
+//        if(id == R.id.delete_button) {
+//
+//        }
+//        return super.onOptionsItemSelected(item);
+//
+//    }
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.task_detail_fragment, container, false);
 
