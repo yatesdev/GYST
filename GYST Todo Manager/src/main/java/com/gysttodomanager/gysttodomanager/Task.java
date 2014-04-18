@@ -8,7 +8,7 @@ import java.util.UUID;
 /**
  * Created by Yates on 4/10/14.
  */
-public class Task {
+public class Task{
     private String taskName;
     private Calendar dateDue;
     private int priority; //1=High 2=Medium 3=Low
@@ -88,4 +88,5 @@ public class Task {
         str += getDescription();
         return str;
     }
+
 }

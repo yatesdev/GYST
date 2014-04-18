@@ -67,15 +67,16 @@ public class TaskArrayAdapter extends ArrayAdapter<Task> {
                     taskDoneBox.setChecked(false);
                     t1.setCompleted(false);
                     taskTitleArea.setPaintFlags(taskTitleArea.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+                    notifyDataSetChanged();
+
                     v.invalidate();
-                    System.out.println(t1.isCompleted());
                 }
                 else {
                     taskDoneBox.setChecked(true);
                     t1.setCompleted(true);
                     taskTitleArea.setPaintFlags(taskTitleArea.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                    notifyDataSetChanged();
                     v.invalidate();
-                    System.out.println(t1.isCompleted());
                 }
             }
         });

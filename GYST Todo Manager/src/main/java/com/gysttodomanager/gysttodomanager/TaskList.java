@@ -3,6 +3,7 @@ package com.gysttodomanager.gysttodomanager;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.ListIterator;
@@ -26,9 +27,11 @@ public class TaskList {
         todayList.add(new Task("Test #2",new GregorianCalendar(),2,"This is also a test",true));
         tomorrowList.add(new Task("Tomorrow Test",new GregorianCalendar(),1,"Test Tomorrow",false));
         upcomingList.add(new Task("Upcoming Test",new GregorianCalendar(),1,"Test Upcoming",false));
+        sort();
     }
 
     public ArrayList getCurrentList(int section){
+        sort();
         if(section == 0){
             return todayList;
         }
@@ -116,6 +119,7 @@ public class TaskList {
                 upcomingList.add(t);
             }
         }
+        sort();
     }
 
     /**
@@ -137,5 +141,12 @@ public class TaskList {
                 upcomingList.remove(i);
             }
         }
+        sort();
+    }
+
+    public void sort() {
+        Collections.sort(todayList,new TaskSort());
+        Collections.sort(tomorrowList,new TaskSort());
+        Collections.sort(upcomingList,new TaskSort());
     }
 }
