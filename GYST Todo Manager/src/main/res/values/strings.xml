@@ -20,4 +20,6 @@
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
 
+    <string name="app_info_credits">Created By: \n Mike Yates\n Hannah Sarah Litsch\n Jasur Parmonov</string>
+
 </resources>

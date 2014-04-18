@@ -10,7 +10,7 @@ import android.view.MenuItem;
 import android.support.v4.widget.DrawerLayout;
 
 public class MainActivity extends Activity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks, TaskListFragment.OnTaskSelectedListener,TaskDetailFragment.OnTaskDetailListener {
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks, TaskListFragment.OnTaskSelectedListener,TaskDetailFragment.OnTaskDetailListener, AppInfoFragment.onAppInfoClickListener{
 
     /**
      * The ArrayLists that contain the tasks.
@@ -156,6 +156,12 @@ public class MainActivity extends Activity
                     .replace(R.id.container, mtaskListFragment)
                     .commit();
         }
+        if(id == R.id.action_appinfo) {
+            FragmentManager fragmentManager = getFragmentManager();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.container, new AppInfoFragment())
+                    .commit();
+        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -172,7 +178,6 @@ public class MainActivity extends Activity
 
     @Override
     public void onTaskSaved(Task t) {
-        System.out.println("I should be saving the task now");
         taskList.add(t);
         FragmentManager fragmentManager = getFragmentManager();
         fragmentManager.beginTransaction()
@@ -182,6 +187,14 @@ public class MainActivity extends Activity
 
     @Override
     public void onTaskDetailCancel() {
+        FragmentManager fragmentManager = getFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.container, mtaskListFragment)
+                .commit();
+    }
+
+    @Override
+    public void onAppInfoClick() {
         FragmentManager fragmentManager = getFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.container, mtaskListFragment)
