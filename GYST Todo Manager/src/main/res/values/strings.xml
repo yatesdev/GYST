@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">GYST Todo</string>
+    <string name="title_section1">Today</string>
+    <string name="title_section2">Tomorrow</string>
+    <string name="title_section3">Soon</string>
+    <string name="title_section4">Upcoming</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="add_menu_text">Add</string>
+    <string name="edit_menu_text">Edit</string>
+    <string name="delete_menu_text">Delete</string>
+    <string name="addDialogTitle">Add Event</string>
+    <string name="action_appinfo">App Info</string>
+
+    <string name="eventNameDefault">Event Name</string>
+    <string name="eventDescHint">Description</string>
+    <string name="eventDateHint">Due Date</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+
+</resources>
