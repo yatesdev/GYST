@@ -1,27 +1,30 @@
 package com.gysttodomanager.gysttodomanager;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.UUID;
 
 /**
  * Created by Yates on 4/10/14.
  */
-public class Task{
+
+/**
+ * Task
+ * The container for the information stored by the program
+ */
+public class Task {
     private String taskName;
     private Calendar dateDue;
-    private int priority; //1=High 2=Medium 3=Low
+    private int priority; //3=High 2=Medium 1=Low
     private String description;
     private boolean isCompleted;
     private String uniqueID;
 
 
     /**
-     * Constructor
-     * @return
+     * This is the full constructor, only used for debug and dummy data definitions.
      */
-    public Task(String task, Calendar due, int pri, String desc, boolean complete){
+    public Task(String task, Calendar due, int pri, String desc, boolean complete) {
         taskName = task;
         dateDue = due;
         priority = pri;
@@ -30,7 +33,10 @@ public class Task{
         uniqueID = UUID.randomUUID().toString();
     }
 
-    public Task(){
+    /**
+     * This is the blank constructor called when we are adding a new item
+     */
+    public Task() {
         taskName = "";
         dateDue = new GregorianCalendar();
         priority = 1;
@@ -80,9 +86,11 @@ public class Task{
         this.isCompleted = isCompleted;
     }
 
-    public String getUniqueID(){ return uniqueID; }
+    public String getUniqueID() {
+        return uniqueID;
+    }
 
-    public String toString(){
+    public String toString() {
         String str = "";
         str += getTaskName();
         str += getDescription();

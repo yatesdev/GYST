@@ -1,12 +1,8 @@
 package com.gysttodomanager.gysttodomanager;
 
-import android.app.ActionBar;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -15,26 +11,37 @@ import android.widget.EditText;
 import android.widget.RatingBar;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 
 /**
  * Created by Yates on 4/1/14.
  */
-public class TaskDetailFragment extends Fragment {
-    private Task task;
-    private Boolean editable;
-    private Calendar tempDate = new GregorianCalendar();
-    private Menu mOptionsMenu;
 
+/**
+ * TaskDetailFragment
+ * Shows the information regarding a singular task. With options to edit or delete the task.
+ */
+public class TaskDetailFragment extends Fragment {
     EditText titleBox;
     EditText descriptionBox;
     DatePicker datePick;
     RatingBar priorityBox;
+    Button okButton;
+    Button cancelButton;
+    private Task task;
+    private Boolean editable;
+    private Calendar tempDate = new GregorianCalendar();
 
-
-    public TaskDetailFragment(Task t, Boolean editable){
-        if(t != null)
+    /**
+     * Constructor for TaskDetailFragment
+     * If we are creating a new task, the passing arguments are null,true
+     * That way we start with a blank slate and can edit it
+     *
+     * @param t        the task we are currently viewing
+     * @param editable Boolean defining if we are in editing mode or not.
+     */
+    public TaskDetailFragment(Task t, Boolean editable) {
+        if (t != null)
             task = t;
         else
             task = new Task();
@@ -42,76 +49,38 @@ public class TaskDetailFragment extends Fragment {
 
     }
 
+    /**
+     * This allows the main activity to alter the actionBar for this fragment
+     *
+     * @param savedInstanceState
+     */
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
-    }
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
-        //inflater.inflate(R.menu.detail_fragment_menu, menu);
-        mOptionsMenu = menu;
-        super.onCreateOptionsMenu(menu,inflater);
+        setHasOptionsMenu(true); //This is the key line of code here.
     }
 
-    public Boolean getEditable() {
-        return editable;
-    }
-    public void setEditable(Boolean b) {
-        editable = b;
-    }
-    public Task getTask(){
-        return task;
-    }
-
-//    public void onPrepareOptionsMenu(Menu menu){
-//        if(editable){
-//            menu.findItem(R.id.edit_button).setVisible(false);
-//            menu.findItem(R.id.delete_button).setVisible(false);
-//        }
-//        else {
-//            menu.findItem(R.id.edit_button).setVisible(true);
-//            menu.findItem(R.id.delete_button).setVisible(true);
-//        }
-//        getActivity().invalidateOptionsMenu();
-//    }
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        int id = item.getItemId();
-//        if (id == R.id.action_settings) {
-//            return true;
-//        }
-//        if(id == R.id.edit_button) {
-//            editable = !editable;
-//            titleBox.setClickable(true);
-//            titleBox.setFocusableInTouchMode(true);
-//            titleBox.setEnabled(true);
-//            descriptionBox.setClickable(true);
-//            descriptionBox.setFocusableInTouchMode(true);
-//            descriptionBox.setEnabled(true);
-//            datePick.setClickable(true);
-//            datePick.setFocusableInTouchMode(true);
-//            datePick.setEnabled(true);
-//            priorityBox.setClickable(true);
-//            priorityBox.setFocusableInTouchMode(true);
-//            priorityBox.setEnabled(true);
-//            System.out.println("Hey I should be in edit mode now");
-//        }
-//        if(id == R.id.delete_button) {
-//
-//        }
-//        return super.onOptionsItemSelected(item);
-//
-//    }
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
+    /**
+     * This is the initial setup of the page, setting the text values and other UI elements.
+     * Also sets up UI elements based upon whether or not we are in editable mode.
+     * Defines the button actions.
+     *
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.task_detail_fragment, container, false);
 
         //Get Items in Fragment
-        titleBox = (EditText)rootView.findViewById(R.id.eventName);
-        descriptionBox = (EditText)rootView.findViewById(R.id.eventDesc);
-        datePick = (DatePicker)rootView.findViewById(R.id.datePicker);
-        priorityBox = (RatingBar)rootView.findViewById(R.id.ratingBar);
-        Button okButton = (Button)rootView.findViewById(R.id.okButton);
-        Button cancelButton = (Button)rootView.findViewById(R.id.cancelButton);
+        titleBox = (EditText) rootView.findViewById(R.id.eventName);
+        descriptionBox = (EditText) rootView.findViewById(R.id.eventDesc);
+        datePick = (DatePicker) rootView.findViewById(R.id.datePicker);
+        priorityBox = (RatingBar) rootView.findViewById(R.id.ratingBar);
+        okButton = (Button) rootView.findViewById(R.id.okButton);
+        cancelButton = (Button) rootView.findViewById(R.id.cancelButton);
 
+        //Display the task's information
         titleBox.setText(task.getTaskName());
         descriptionBox.setText(task.getDescription());
         datePick.init(task.getDateDue().get(Calendar.YEAR), task.getDateDue().get(Calendar.MONTH), task.getDateDue().get(Calendar.DAY_OF_MONTH), new DatePicker.OnDateChangedListener() {
@@ -120,11 +89,10 @@ public class TaskDetailFragment extends Fragment {
                 tempDate = new GregorianCalendar(year, monthOfYear, dayOfMonth); //We will update the tasks date when the user presses OK.
             }
         });
-
         priorityBox.setRating(task.getPriority());
 
         //Disable editing if we aren't in edit mode.
-        if(!editable){
+        if (!editable) {
             titleBox.setClickable(false);
             titleBox.setFocusableInTouchMode(false);
             descriptionBox.setClickable(false);
@@ -137,26 +105,25 @@ public class TaskDetailFragment extends Fragment {
             priorityBox.setEnabled(false);
         }
 
-
-
+        //Listens for the button Click. Updates the task to the new values, then calls the activity
+        //to continue the process of saving the task.
         okButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 task.setTaskName(titleBox.getText().toString());
                 task.setDescription(descriptionBox.getText().toString());
                 task.setDateDue(tempDate);
-                task.setPriority((int)priorityBox.getRating());
+                task.setPriority((int) priorityBox.getRating());
                 task.setCompleted(false);
-
                 OnTaskDetailListener mCallback = (OnTaskDetailListener) rootView.getContext();
-                System.out.println(mCallback);
                 mCallback.onTaskSaved(task);
             }
         });
+        //Listens for the button Click. Nothing needs to be done within the fragment, so it passes
+        //the button click back up to the activity for processing.
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("You clicked cancel");
                 OnTaskDetailListener mCallback = (OnTaskDetailListener) rootView.getContext();
                 mCallback.onTaskDetailCancel();
             }
@@ -164,10 +131,25 @@ public class TaskDetailFragment extends Fragment {
         return rootView;
     }
 
+    public Boolean getEditable() {
+        return editable;
+    }
 
+    public void setEditable(Boolean b) {
+        editable = b;
+    }
+
+    public Task getTask() {
+        return task;
+    }
+
+    /**
+     * This is the interface that the activity implements when either the okButton or cancelButtons are clicked
+     */
     public interface OnTaskDetailListener {
-        public void onTaskSaved(Task t);
-        public void onTaskDetailCancel();
+        public void onTaskSaved(Task t); //okButton
+
+        public void onTaskDetailCancel();//cancelButton
     }
 
 }
