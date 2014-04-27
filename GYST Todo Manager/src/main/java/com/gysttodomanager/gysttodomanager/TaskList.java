@@ -17,23 +17,18 @@ import java.util.GregorianCalendar;
  * from a larger combined list each time I needed data. In hindsight this is probably stupid.
  */
 public class TaskList {
-    private ArrayList<Task> todayList;
-    private ArrayList<Task> tomorrowList;
-    private ArrayList<Task> upcomingList;
-
+    private ArrayList<Task> taskList;
     /**
      * Constructor that sets up the arrayLists and dummy data.
      */
     public TaskList(){
-        todayList = new ArrayList<Task>();
-        tomorrowList = new ArrayList<Task>();
-        upcomingList = new ArrayList<Task>();
+        taskList = new ArrayList<Task>();
 
         //This is the dummy data I added to the lists for testing purposes
-        todayList.add(new Task("Test",new GregorianCalendar(),1,"This is a test",false));
-        todayList.add(new Task("Test #2",new GregorianCalendar(),2,"This is also a test",true));
-        tomorrowList.add(new Task("Tomorrow Test",new GregorianCalendar(),1,"Test Tomorrow",false));
-        upcomingList.add(new Task("Upcoming Test",new GregorianCalendar(),1,"Test Upcoming",false));
+        taskList.add(new Task("Test",new GregorianCalendar(),1,"This is a test",false));
+        taskList.add(new Task("Test #2",new GregorianCalendar(),2,"This is also a test",true));
+        taskList.add(new Task("Tomorrow Test",new GregorianCalendar(),1,"Test Tomorrow",false));
+        taskList.add(new Task("Upcoming Test",new GregorianCalendar(),1,"Test Upcoming",false));
         sort();
     }
 
@@ -43,22 +38,44 @@ public class TaskList {
      * @return The proper arraylist for the context.
      */
     public ArrayList getCurrentList(int section){
-        sort();
+        ArrayList<Task> tempList = new ArrayList<Task>();
+        Calendar tempCal = new GregorianCalendar();
+        Calendar currentDay = new GregorianCalendar(tempCal.get(Calendar.YEAR),tempCal.get(Calendar.MONTH),tempCal.get(Calendar.DAY_OF_MONTH));
+        Calendar tomorrowDay = new GregorianCalendar(tempCal.get(Calendar.YEAR),tempCal.get(Calendar.MONTH),tempCal.get(Calendar.DAY_OF_MONTH));
+        tomorrowDay.add(Calendar.DAY_OF_MONTH,1); //Calendar why you gotta be so stupid sometimes??
+
         if(section == 0){
-            return todayList;
+            for(Task t : taskList){
+                Calendar taskDay = new GregorianCalendar(t.getDateDue().get(Calendar.YEAR),t.getDateDue().get(Calendar.MONTH),t.getDateDue().get(Calendar.DAY_OF_MONTH));
+                if(taskDay.compareTo(currentDay) <= 0){
+                    tempList.add(t);
+                }
+            }
+            sort();
+            return tempList;
         }
         else if (section == 1) {
-            return tomorrowList;
+            for(Task t : taskList){
+                Calendar taskDay = new GregorianCalendar(t.getDateDue().get(Calendar.YEAR),t.getDateDue().get(Calendar.MONTH),t.getDateDue().get(Calendar.DAY_OF_MONTH));
+                if(taskDay.compareTo(tomorrowDay) == 0){
+                    tempList.add(t);
+                }
+            }
+            sort();
+            return tempList;
         }
         else if (section == 2) {
-            return upcomingList;
+            for(Task t : taskList){
+                Calendar taskDay = new GregorianCalendar(t.getDateDue().get(Calendar.YEAR),t.getDateDue().get(Calendar.MONTH),t.getDateDue().get(Calendar.DAY_OF_MONTH));
+                if(taskDay.compareTo(tomorrowDay) > 0){
+                    tempList.add(t);
+                }
+            }
+            sort();
+            return tempList;
         }
         else if(section == 3) { //Not necessary in this version, however there was a plan to have an all tasks tab.
-            ArrayList<Task> temp = new ArrayList();
-            temp.addAll(todayList);
-            temp.addAll(tomorrowList);
-            temp.addAll(upcomingList);
-            return temp;
+            return taskList;
         }
         else {
             return new ArrayList();
@@ -69,14 +86,11 @@ public class TaskList {
      * Compares the UniqueID of the new task and the old tasks, if they are equivalent then update
      * otherwise add the new task to the list.
      *
-     * This might need to be bug checked as I think there is an edge case where bad things happen.
-     * (Something like changing the due date on an old task. If it is found in today but the new due date is
-     * tomorrow, it won't move to the new list because it technically already exists)
      * @param t The new task we want to add
      */
     public void add(Task t){
         Boolean found = false;
-        for (Task task : todayList){
+        for (Task task : taskList){
             if(task.getUniqueID().equals(t.getUniqueID())) {
                 //Since the task already exists, we can just update it
                 task.setTaskName(t.getTaskName());
@@ -86,53 +100,11 @@ public class TaskList {
                 found = true;
             }
         }
+        //So the task doesn't exist yet, so now we have to add it
         if(!found) {
-            for (Task task : tomorrowList) {
-                if (task.getUniqueID().equals(t.getUniqueID())) {
-                    //Since the task already exists, we can just update it
-                    task.setTaskName(t.getTaskName());
-                    task.setDescription(t.getDescription());
-                    task.setDateDue(t.getDateDue());
-                    task.setPriority(t.getPriority());
-                    found = true;
-                }
-            }
+            taskList.add(t);
+            sort();
         }
-        if(!found) {
-            for (Task task : upcomingList) {
-                if (task.getUniqueID().equals(t.getUniqueID())) {
-                    //Since the task already exists, we can just update it
-                    task.setTaskName(t.getTaskName());
-                    task.setDescription(t.getDescription());
-                    task.setDateDue(t.getDateDue());
-                    task.setPriority(t.getPriority());
-                    found = true;
-                }
-            }
-        }
-        //So the new task doesn't already exist, so now we have to add it
-        if(!found){
-            Calendar tempCal = new GregorianCalendar();
-            Calendar currentDay = new GregorianCalendar(tempCal.get(Calendar.YEAR),tempCal.get(Calendar.MONTH),tempCal.get(Calendar.DAY_OF_MONTH));
-            Calendar tomorrowDay = new GregorianCalendar(tempCal.get(Calendar.YEAR),tempCal.get(Calendar.MONTH),tempCal.get(Calendar.DAY_OF_MONTH));
-            tomorrowDay.add(Calendar.DAY_OF_MONTH,1); //Calendar why you gotta be so stupid sometimes??
-            Calendar taskDay = new GregorianCalendar(t.getDateDue().get(Calendar.YEAR),t.getDateDue().get(Calendar.MONTH),t.getDateDue().get(Calendar.DAY_OF_MONTH));
-
-            //Decide which list to add to.
-            //TodayList check
-            if(taskDay.compareTo(currentDay) <= 0){
-                todayList.add(t);
-            }
-            //TomorrowList Check
-            else if(taskDay.compareTo(tomorrowDay) == 0) {
-                tomorrowList.add(t);
-            }
-            //UpcomingList Check
-            else {
-                upcomingList.add(t);
-            }
-        }
-        sort();
     }
 
     /**
@@ -140,19 +112,9 @@ public class TaskList {
      * If the UniqueId's match, then delete the offending item
      */
     public void delete(Task t) {
-        for(int i=0; i< todayList.size(); i++) {
-            if(todayList.get(i).getUniqueID().equals(t.getUniqueID())){
-                todayList.remove(i);
-            }
-        }
-        for(int i=0; i< tomorrowList.size(); i++) {
-            if(tomorrowList.get(i).getUniqueID().equals(t.getUniqueID())){
-                tomorrowList.remove(i);
-            }
-        }
-        for(int i=0; i< upcomingList.size(); i++) {
-            if(upcomingList.get(i).getUniqueID().equals(t.getUniqueID())){
-                upcomingList.remove(i);
+        for(int i=0; i< taskList.size(); i++) {
+            if(taskList.get(i).getUniqueID().equals(t.getUniqueID())){
+                taskList.remove(i);
             }
         }
         sort();
@@ -163,8 +125,6 @@ public class TaskList {
      * which sorts by completedness, priority, then task name, in that order
      */
     public void sort() {
-        Collections.sort(todayList,new TaskSort());
-        Collections.sort(tomorrowList,new TaskSort());
-        Collections.sort(upcomingList,new TaskSort());
+        Collections.sort(taskList,new TaskSort());
     }
 }
