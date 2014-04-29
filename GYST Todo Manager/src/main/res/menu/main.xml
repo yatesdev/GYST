@@ -13,6 +13,14 @@
         android:title="@string/delete_menu_text"
         android:icon="@drawable/ic_action_discard"
         android:showAsAction="ifRoom" />
+    <item android:id="@+id/clear_completed_button"
+        android:title="Clear Completed"
+        android:orderInCategory="98"
+        android:showAsAction="never"/>
+    <item android:id="@+id/settings_button"
+        android:title="Settings"
+        android:orderInCategory="99"
+        android:showAsAction="never"/>
     <item android:id="@+id/action_appinfo"
         android:title="@string/action_appinfo"
         android:orderInCategory="100"

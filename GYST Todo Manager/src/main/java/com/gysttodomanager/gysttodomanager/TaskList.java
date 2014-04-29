@@ -114,6 +114,15 @@ public class TaskList {
         sort();
     }
 
+    public void clearCompleted() {
+        for(int i = 0; i< taskList.size(); i++) {
+            if(taskList.get(i).isCompleted()) {
+                taskList.remove(i);
+            }
+        }
+        sort();
+    }
+
     /**
      * Sorts the arrayLists using the TaskSort Comparator
      * which sorts by completedness, priority, then task name, in that order

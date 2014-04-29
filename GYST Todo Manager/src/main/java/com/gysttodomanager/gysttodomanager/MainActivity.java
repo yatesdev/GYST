@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import java.sql.SQLException;
 
@@ -157,6 +158,13 @@ public class MainActivity extends Activity
                     .replace(R.id.container, mtaskListFragment)
                     .commit();
         }
+        //If we want to clear all the completed tasks
+        if (id == R.id.clear_completed_button) {
+            taskList.clearCompleted();
+            mtaskListFragment.getListView().invalidate();
+            mtaskListFragment.getTaskArrayAdapter().notifyDataSetChanged(); //Should tell the list to redraw itself after the data changed
+            Toast.makeText(getApplicationContext(),"Cleared Completed Items", Toast.LENGTH_SHORT).show();
+        }
         //If we want to view the appInfo screen or the credits
         if (id == R.id.action_appinfo) {
             FragmentManager fragmentManager = getFragmentManager();
@@ -188,6 +196,7 @@ public class MainActivity extends Activity
         fragmentManager.beginTransaction()
                 .replace(R.id.container, mtaskListFragment)
                 .commit();
+        Toast.makeText(getApplicationContext(),"Task Added", Toast.LENGTH_SHORT).show();
     }
 
     /**
