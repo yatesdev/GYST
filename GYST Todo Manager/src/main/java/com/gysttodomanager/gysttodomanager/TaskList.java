@@ -23,13 +23,6 @@ public class TaskList {
      */
     public TaskList(){
         taskList = new ArrayList<Task>();
-
-        //This is the dummy data I added to the lists for testing purposes
-        taskList.add(new Task("Test",new GregorianCalendar(),1,"This is a test",false));
-        taskList.add(new Task("Test #2",new GregorianCalendar(),2,"This is also a test",true));
-        taskList.add(new Task("Tomorrow Test",new GregorianCalendar(),1,"Test Tomorrow",false));
-        taskList.add(new Task("Upcoming Test",new GregorianCalendar(),1,"Test Upcoming",false));
-        sort();
     }
 
     /**
@@ -115,6 +108,7 @@ public class TaskList {
         for(int i=0; i< taskList.size(); i++) {
             if(taskList.get(i).getUniqueID().equals(t.getUniqueID())){
                 taskList.remove(i);
+
             }
         }
         sort();
@@ -126,5 +120,13 @@ public class TaskList {
      */
     public void sort() {
         Collections.sort(taskList,new TaskSort());
+    }
+
+    public ArrayList<Task> getTaskList() {
+        return taskList;
+    }
+
+    public void setTaskList(ArrayList<Task> taskList) {
+        this.taskList = taskList;
     }
 }

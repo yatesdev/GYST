@@ -13,6 +13,7 @@ import java.util.UUID;
  * The container for the information stored by the program
  */
 public class Task {
+    private long id;
     private String taskName;
     private Calendar dateDue;
     private int priority; //3=High 2=Medium 1=Low
@@ -89,6 +90,12 @@ public class Task {
     public String getUniqueID() {
         return uniqueID;
     }
+
+    public void setUniqueID(String id){ uniqueID = id; }
+
+    public long getId() {return id;}
+
+    public void setId(long id) {this.id = id;}
 
     public String toString() {
         String str = "";
