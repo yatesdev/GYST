@@ -22,7 +22,7 @@ public class TaskDatabaseHelper extends SQLiteOpenHelper{
     private static final String DATABASE_NAME = "tasks.db";
     private static final int DATABASE_VERSION = 1;
 
-    private static final String DATABASE_CREATE = "create table Tasks(id integer primary key autoincrement, name text, description text, "+
+    private static final String DATABASE_CREATE = "create table Tasks(id integer primary key autoincrement unique, name text, description text, "+
             "due_date_year integer, due_date_month integer, due_date_day integer, priority integer, completed integer,uuid text);";
 
     public TaskDatabaseHelper(Context context){

@@ -97,10 +97,12 @@ public class TaskDatabase {
         return tasks;
     }
 
+    public void clearDatabase(){
+        database.execSQL("DELETE FROM Tasks;");
+    }
+
     private Task cursorToTask(Cursor cursor) {
         Task t = new Task();
-        for(int i = 0; i < cursor.getColumnCount(); i++)
-            System.out.println(cursor.getString(i));
         t.setUniqueID(cursor.getString(0));
         t.setTaskName(cursor.getString(1));
         t.setDescription(cursor.getString(2));

@@ -43,6 +43,7 @@ public class MainActivity extends Activity
     @Override
     protected void onPause() {
         super.onPause();
+        database.clearDatabase();
         for(Task t: taskList.getTaskList()){
             database.createTask(t);
         }
