@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 public class TaskListFragment extends ListFragment {
 
     private TaskList taskList;
+    private TaskArrayAdapter adapter;
     private int currentSection;
 
     /**
@@ -34,7 +35,7 @@ public class TaskListFragment extends ListFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.task_list, container, false);
 
-        TaskArrayAdapter adapter = new TaskArrayAdapter(getActivity(),
+        adapter = new TaskArrayAdapter(getActivity(),
                 R.layout.list_task_item,
                 R.id.list_item_title,
                 taskList.getCurrentList(currentSection));
@@ -42,6 +43,9 @@ public class TaskListFragment extends ListFragment {
         return rootView;
     }
 
+    public TaskArrayAdapter getTaskArrayAdapter() {
+        return adapter;
+    }
     public interface OnTaskSelectedListener {
         public void onTaskSelected(Task t1, Boolean b); //The boolean determines if we are in editable mode or just view mode
     }

@@ -7,10 +7,14 @@ import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
+
+import java.sql.SQLException;
 
 public class MainActivity extends Activity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks, TaskListFragment.OnTaskSelectedListener, TaskDetailFragment.OnTaskDetailListener, AppInfoFragment.onAppInfoClickListener {
 
+    private TaskDatabase database;
     private TaskList taskList = new TaskList(); //Where all of the task data for the app is stored
 
     private NavigationDrawerFragment mNavigationDrawerFragment;
@@ -30,6 +34,20 @@ public class MainActivity extends Activity
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
+
+        database = new TaskDatabase(this);
+        try {database.open();} catch (SQLException e) {e.printStackTrace();}
+        taskList.setTaskList(database.getAllTasks());
+        taskList.sort();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        database.clearDatabase();
+        for(Task t: taskList.getTaskList()){
+            database.createTask(t);
+        }
     }
 
     /**
@@ -134,10 +152,18 @@ public class MainActivity extends Activity
         //If we want to delete the currently viewed task.
         if (id == R.id.delete_button) {
             taskList.delete(mtaskDetailFragment.getTask());
+            database.deleteTask(mtaskDetailFragment.getTask()); //Also delete from the database as well
             FragmentManager fragmentManager = getFragmentManager();
             fragmentManager.beginTransaction()
                     .replace(R.id.container, mtaskListFragment)
                     .commit();
+        }
+        //If we want to clear all the completed tasks
+        if (id == R.id.clear_completed_button) {
+            taskList.clearCompleted();
+            mtaskListFragment.getListView().invalidate();
+            mtaskListFragment.getTaskArrayAdapter().notifyDataSetChanged(); //Should tell the list to redraw itself after the data changed
+            Toast.makeText(getApplicationContext(),"Cleared Completed Items", Toast.LENGTH_SHORT).show();
         }
         //If we want to view the appInfo screen or the credits
         if (id == R.id.action_appinfo) {
@@ -170,6 +196,7 @@ public class MainActivity extends Activity
         fragmentManager.beginTransaction()
                 .replace(R.id.container, mtaskListFragment)
                 .commit();
+        Toast.makeText(getApplicationContext(),"Task Added", Toast.LENGTH_SHORT).show();
     }
 
     /**
